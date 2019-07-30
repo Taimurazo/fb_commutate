@@ -1,6 +1,35 @@
-# installing geckodriver
+Pert Perviy Iskander1988
+Petr Vtoroy Iskander1988
 
-1. wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
-2. tar -xvzf geckodriver-v0.24.0-linux64.tar.gz
-3. chmod +x geckodriver
-4. cp geckodriver /usr/local/bin/
+
+class FBUser:
+    self.callback( message_text, sender, timestamp)
+
+    def add_callback(callback) +++ done
+        добаавляет callback для пользователя.
+
+    def add_login_password(login, password)     +++ done
+        добавляет логин и пароль пользователя.
+
+    def get_recived_message()
+        получает все сообщения и отправителей.
+        возвращает список кортежей {sendr_user, message_text, timestamp}
+
+
+        может быть множество сообщений.
+        предположительно для всех пользователей вызывается callback
+
+    def login() +++ done
+        регистрируется под указанным логином и паролем.
+
+    def send_message(reciver, message_text)
+        отправляет сообщение от имени пользователя, пользователю target
+
+class FBAssembler:
+
+    def add_user(login, password)
+
+    def send_message(source_user, target_user)
+
+
+
