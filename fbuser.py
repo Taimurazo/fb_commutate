@@ -14,13 +14,17 @@ class FBUser(Client):
         super(FBUser, self).__init__(email=login, password=password)
 
     def set_callback(self, callback):
+        """
+
+        Args:
+            callback:  custom callback.
+        Returns: None
+
+        """
         if callback != None:
             self._callback = callback
         else:
             raise ValueError("callback can't be None.")
-
-    def send_message(self, first_name, last_name, message_text=''):
-        pass
 
     def onMessage(
             self,
@@ -34,7 +38,23 @@ class FBUser(Client):
             metadata=None,
             msg=None,
     ):
-        self._callback(message_object.text, author_id, ts)
+        """
+        Executes callback when message recived.
+        Args:
+            mid:
+            author_id: - id of message author
+            message: - message text (deprecated. use message_object.text)
+            message_object:
+            thread_id:
+            thread_type:
+            ts: message timestamp
+            metadata:
+            msg:
+
+        Returns:
+
+        """
+        self._callback(message_object.text, author_id, ts, self)
 
 
 class FBAssenbler:
@@ -44,31 +64,65 @@ class FBAssenbler:
         self._threads = []
 
     def add_user(self, email, pswd, callback):
+        """
+        Add user to assemble.
+        Args:
+            email: user login
+            pswd: user password
+            callback:  custom callback
+        Returns:
+
+        """
         self.users[email] = {'email': email, 'password': pswd, 'callback': callback}
 
     def _run(self, email):
+        """
+        Thread function.
+        Args:
+            email: user login.
+        Returns:
+
+        """
         fb_user = FBUser(login=email, password=self.users[email]['password'])
         fb_user.set_callback(self.users[email]['callback'])
         fb_user.listen()
 
     def listen_all_users(self):
+        """
+        Run all user listeners in separate threads.
+        Returns:
+
+        """
         for email in self.users.keys():
             self._threads = threading.Thread(target=self._run, args=(email,))
             self._threads.start()
 
 
+def callback1(msg_text, from_user_id, timestamp, fb_user):
+    """
 
-def callback(msg_text, user_id, timestamp):
-    print(timestamp, " ", user_id, " ", msg_text)
-    print(threading.current_thread().ident)
+    Args:
+        msg_text: message text.
+        user_id: id og message author
+        timestamp: message timestamp.
+        fb_obj: user object. Can send messages  (send(Message(text='test message '), thread_id=uid, thread_type=ThreadType.USER))
+
+    Returns:
+
+    """
+    print("Pavel Perviy")
+    print(timestamp, " ", from_user_id, " ", msg_text)
+
+
+def callback2(msg_text, from_user_id, timestamp, fb_user):
+    print("Pavel Vtoroy")
+    print(timestamp, " ", from_user_id, " ", msg_text)
+
 
 def one_user():
-    # f1 = FBUser('bitakovt@gmail.com', 'Iskander1988')
-    # f1.set_callback(callback)
-    # f1.listen()
     asmb = FBAssenbler()
-    asmb.add_user('taymerlance@gmail.com', 'Iskander1988', callback)
-    asmb.add_user('bitakovt@gmail.com', 'Iskander1988', callback)
+    asmb.add_user('test', 'test', callback1)
+    asmb.add_user('test', 'test', callback2)
     asmb.listen_all_users()
 
 
