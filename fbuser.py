@@ -54,7 +54,10 @@ class FBUser(Client):
         Returns:
 
         """
-        self._callback(message_object.text, author_id, ts, self)
+        if author_id != self.uid:
+            self._callback(message_object.text, author_id, ts, self)
+        else:
+            print("Self messaging not alowed to avoid infinite looping. user id = %s" % author_id)
 
 
 class FBAssenbler:
@@ -110,19 +113,15 @@ def callback1(msg_text, from_user_id, timestamp, fb_user):
     Returns:
 
     """
-    print("Pavel Perviy")
-    print(timestamp, " ", from_user_id, " ", msg_text)
+    user_id = 1 # SET VALID USER ID
+    fb_user.send(Message(text='ECHO: %s' % msg_text), thread_id=user_id, thread_type=ThreadType.USER)
 
 
-def callback2(msg_text, from_user_id, timestamp, fb_user):
-    print("Pavel Vtoroy")
-    print(timestamp, " ", from_user_id, " ", msg_text)
 
 
 def one_user():
     asmb = FBAssenbler()
-    asmb.add_user('test', 'test', callback1)
-    asmb.add_user('test', 'test', callback2)
+    asmb.add_user("test@gmail.com", 'test', callback1)
     asmb.listen_all_users()
 
 
