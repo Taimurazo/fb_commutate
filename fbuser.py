@@ -87,6 +87,7 @@ class FBAssenbler:
 
         """
         fb_user = FBUser(login=email, password=self.users[email]['password'])
+        print("User ID: %s" % fb_user.uid)
         fb_user.set_callback(self.users[email]['callback'])
         fb_user.listen()
 
